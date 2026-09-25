@@ -6,8 +6,9 @@
 .dd-book:not(.dd-print) > section, .dd-book:not(.dd-print) > article { max-width: 820px; margin: 0 auto 64px; }
 
 .dd-cover { page: cover; break-after: page; }
-.dd-print .dd-cover { padding: 26mm 22mm 24mm; background: var(--dd-paper); border-left: 10mm solid var(--dd-accent); }
-.dd-book:not(.dd-print) .dd-cover { min-height: 560px; padding: 48px; background: var(--dd-surface); border: 1px solid var(--dd-rule); border-left: 10px solid var(--dd-accent); border-radius: var(--dd-radius); }
+/* Cover and page backgrounds come from the config (background.cover / .page). */
+.dd-print .dd-cover { padding: 26mm 22mm 24mm; border-left: 10mm solid var(--dd-emphasis); }
+.dd-book:not(.dd-print) .dd-cover { min-height: 560px; padding: 48px; border: 1px solid var(--dd-rule); border-left: 10px solid var(--dd-emphasis); border-radius: var(--dd-radius); }
 
 .dd-index { break-after: page; display: flex; flex-direction: column; gap: 0.4em; }
 .dd-index-title { font-size: 2.2em; margin-bottom: 0.6em; }
@@ -15,7 +16,7 @@
 .dd-toc > li { border-top: 1px solid var(--dd-rule); padding: 0.7em 0; break-inside: avoid; }
 .dd-toc > li:last-child { border-bottom: 1px solid var(--dd-rule); }
 .dd-toc > li > a { display: grid; grid-template-columns: 2.4em 1fr auto; gap: 0.8em; align-items: baseline; color: var(--dd-ink); }
-.dd-toc-n { font-family: var(--dd-font-mono); color: var(--dd-accent); font-weight: 600; }
+.dd-toc-n { font-family: var(--dd-font-mono); color: var(--dd-emphasis); font-weight: 600; }
 .dd-toc-body { display: flex; flex-direction: column; }
 .dd-toc-title { font-weight: 600; font-size: 1.08em; }
 .dd-toc-summary { color: var(--dd-muted); font-size: 0.92em; }
@@ -24,7 +25,7 @@
 .dd-toc-sections a { color: var(--dd-muted); }
 
 .dd-chapter { break-before: page; display: flex; flex-direction: column; gap: 1.4em; }
-.dd-chapter-head { display: flex; flex-direction: column; gap: 0.45em; padding-bottom: 1em; border-bottom: 2px solid var(--dd-accent); }
+.dd-chapter-head { display: flex; flex-direction: column; gap: 0.45em; padding-bottom: 1em; border-bottom: 2px solid var(--dd-emphasis); }
 .dd-chapter-head h1 { font-size: 2.3em; }
 .dd-book .dd-prose h2 { break-after: avoid; padding-top: 0.4em; }
 .dd-book .dd-prose h3 { break-after: avoid; }

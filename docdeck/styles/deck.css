@@ -7,7 +7,6 @@
   --dd-fit: 1;
   width: 1600px; height: 900px; flex: none;
   position: relative; overflow: hidden;
-  background: var(--dd-paper);
   font-size: calc(24px * var(--dd-fit));
   line-height: 1.5;
   padding: 72px 96px 96px;
@@ -43,28 +42,26 @@
 .dd-slide-mark.dd-wide { width: 110px; }
 .dd-slide-n { font-variant-numeric: tabular-nums; }
 
-/* Cover slide: ink ground */
-.dd-slide-cover { background: var(--dd-ink); color: var(--dd-paper); padding: 88px 110px; }
-.dd-slide-cover h1 { color: var(--dd-paper); font-size: 3.4em; }
-.dd-slide-cover .dd-kicker, .dd-slide-cover .dd-tagline, .dd-slide-cover .dd-cover-meta dt { color: color-mix(in oklab, var(--dd-paper) 70%, var(--dd-ink)); }
+/* Cover slide. Its background and text colours come from background.deckCover. */
+.dd-slide-cover { padding: 88px 110px; }
+.dd-slide-cover h1 { font-size: 3.4em; }
 .dd-slide-cover .dd-cover-brand .dd-logo { height: 64px; }
-.dd-slide-cover .dd-wordmark { color: var(--dd-paper); }
-.dd-slide-cover::after { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 18px; background: var(--dd-accent); }
+.dd-slide-cover::after { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 18px; background: var(--dd-emphasis); }
 
 /* Index slide */
 .dd-deck-toc { list-style: none; margin: 0.4em 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0 3em; }
 .dd-deck-toc li a { display: grid; grid-template-columns: 2.2em 1fr auto; gap: 0.6em; padding: 0.45em 0; border-bottom: 1px solid var(--dd-rule); color: var(--dd-ink); font-size: 0.95em; }
-.dd-deck-toc .dd-toc-n { font-family: var(--dd-font-mono); color: var(--dd-accent); font-weight: 600; }
+.dd-deck-toc .dd-toc-n { font-family: var(--dd-font-mono); color: var(--dd-emphasis); font-weight: 600; }
 .dd-deck-toc .dd-toc-page { font-family: var(--dd-font-mono); color: var(--dd-muted); }
 
 /* Chapter opener */
 .dd-slide-chapter .dd-slide-body { justify-content: center; }
-.dd-chapter-n { font-family: var(--dd-font-mono); font-size: 1.1em; color: var(--dd-accent); font-weight: 600; }
+.dd-chapter-n { font-family: var(--dd-font-mono); font-size: 1.1em; color: var(--dd-emphasis); font-weight: 600; }
 .dd-chapter-title { font-size: 2.6em !important; }
 .dd-slide-chapter .dd-lede { font-size: 1.05em; }
 .dd-chapter-agenda { margin: 0.6em 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 0.4em 0.5em; font-size: 0.72em; }
 .dd-chapter-agenda li { border: 1px solid var(--dd-rule); border-radius: 3px; padding: 0.15em 0.7em; color: var(--dd-muted); background: var(--dd-surface); }
-.dd-slide-chapter::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 12px; background: var(--dd-accent); }
+.dd-slide-chapter::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 12px; background: var(--dd-emphasis); }
 
 /* Presenter nav */
 .dd-deck-nav {

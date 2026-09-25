@@ -6,6 +6,7 @@ import { lintChapter, loadChapters, referencedScreens, referencedSources, type C
 import { buildBookPdf, buildDeckPdf, launch, measureDeck, type StampOptions } from "./pdf.ts";
 import { hasSource, loadProviders, resolveSources } from "./providers.ts";
 import { baseCss, dataUri, renderBook, renderChapters, renderDeck, type RenderInput, type RenderedChapter } from "./render.ts";
+import { backgroundCss } from "./background.ts";
 import { captureScreens } from "./screens.ts";
 import { fontCss, resolveFonts, resolveTokens, stampFontFile, themeCss } from "./theme.ts";
 
@@ -31,6 +32,7 @@ async function prepare(loaded: LoadedConfig, opts: { browser: Browser | null; ca
   const fonts = resolveFonts(loaded);
   const out = loaded.path(config.out);
   const wantedScreens = [...new Set(chapters.flatMap((c) => referencedScreens(c.body)))];
+  const bg = backgroundCss(config.background, tokens, loaded.path);
   const shots = await captureScreens(opts.browser, config.screens, wantedScreens, out, { capture: opts.captureScreens });
   const input: RenderInput = {
     project: { ...config.project, edition: editionLabel(config.project.edition) },
@@ -39,7 +41,9 @@ async function prepare(loaded: LoadedConfig, opts: { browser: Browser | null; ca
     mark: config.brand.mark ? dataUri(loaded.path(config.brand.mark)) : null,
     css: { base: baseCss(), theme: themeCss(tokens), fonts: fontCss(fonts) },
     labels: config.labels,
-    page: { size: config.book.size, margin: config.book.margin, paper: tokens.paper },
+    page: { size: config.book.size, margin: config.book.margin, background: bg.pageDeclarations },
+    backgroundCss: bg.css,
+    dark: { cover: Boolean(bg.dark.cover), deckCover: Boolean(bg.dark.deckCover) },
     extraCss: config.styles.map((f) => readFileSync(loaded.path(f), "utf8")).join("\n"),
     sources,
     screens: shots.uris,

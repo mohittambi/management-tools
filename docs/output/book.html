@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dd-book-root">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -39,6 +39,8 @@
   --dd-muted-tint: color-mix(in oklab, var(--dd-muted) 10%, var(--dd-surface));
   --dd-attention-ink: color-mix(in oklab, var(--dd-attention) 70%, var(--dd-ink));
   --dd-radius: 6px;
+  /* Accent-coloured details (chapter numbers, stripes). Lightened on dark grounds. */
+  --dd-emphasis: var(--dd-accent);
 }
 * { box-sizing: border-box; }
 html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -206,8 +208,9 @@ figcaption { font-family: var(--dd-font-mono); font-size: 0.78em; letter-spacing
 .dd-book:not(.dd-print) > section, .dd-book:not(.dd-print) > article { max-width: 820px; margin: 0 auto 64px; }
 
 .dd-cover { page: cover; break-after: page; }
-.dd-print .dd-cover { padding: 26mm 22mm 24mm; background: var(--dd-paper); border-left: 10mm solid var(--dd-accent); }
-.dd-book:not(.dd-print) .dd-cover { min-height: 560px; padding: 48px; background: var(--dd-surface); border: 1px solid var(--dd-rule); border-left: 10px solid var(--dd-accent); border-radius: var(--dd-radius); }
+/* Cover and page backgrounds come from the config (background.cover / .page). */
+.dd-print .dd-cover { padding: 26mm 22mm 24mm; border-left: 10mm solid var(--dd-emphasis); }
+.dd-book:not(.dd-print) .dd-cover { min-height: 560px; padding: 48px; border: 1px solid var(--dd-rule); border-left: 10px solid var(--dd-emphasis); border-radius: var(--dd-radius); }
 
 .dd-index { break-after: page; display: flex; flex-direction: column; gap: 0.4em; }
 .dd-index-title { font-size: 2.2em; margin-bottom: 0.6em; }
@@ -215,7 +218,7 @@ figcaption { font-family: var(--dd-font-mono); font-size: 0.78em; letter-spacing
 .dd-toc > li { border-top: 1px solid var(--dd-rule); padding: 0.7em 0; break-inside: avoid; }
 .dd-toc > li:last-child { border-bottom: 1px solid var(--dd-rule); }
 .dd-toc > li > a { display: grid; grid-template-columns: 2.4em 1fr auto; gap: 0.8em; align-items: baseline; color: var(--dd-ink); }
-.dd-toc-n { font-family: var(--dd-font-mono); color: var(--dd-accent); font-weight: 600; }
+.dd-toc-n { font-family: var(--dd-font-mono); color: var(--dd-emphasis); font-weight: 600; }
 .dd-toc-body { display: flex; flex-direction: column; }
 .dd-toc-title { font-weight: 600; font-size: 1.08em; }
 .dd-toc-summary { color: var(--dd-muted); font-size: 0.92em; }
@@ -224,7 +227,7 @@ figcaption { font-family: var(--dd-font-mono); font-size: 0.78em; letter-spacing
 .dd-toc-sections a { color: var(--dd-muted); }
 
 .dd-chapter { break-before: page; display: flex; flex-direction: column; gap: 1.4em; }
-.dd-chapter-head { display: flex; flex-direction: column; gap: 0.45em; padding-bottom: 1em; border-bottom: 2px solid var(--dd-accent); }
+.dd-chapter-head { display: flex; flex-direction: column; gap: 0.45em; padding-bottom: 1em; border-bottom: 2px solid var(--dd-emphasis); }
 .dd-chapter-head h1 { font-size: 2.3em; }
 .dd-book .dd-prose h2 { break-after: avoid; padding-top: 0.4em; }
 .dd-book .dd-prose h3 { break-after: avoid; }
@@ -232,17 +235,24 @@ figcaption { font-family: var(--dd-font-mono); font-size: 0.78em; letter-spacing
 .dd-print .dd-table-wrap { overflow: visible; }
 .dd-print .dd-screen-frame { box-shadow: none; }
 
-@page { size: A4; margin: 24mm 22mm 26mm 22mm; background: #f6f4ef; }
+@page { size: A4; margin: 24mm 22mm 26mm 22mm; background-color: #f6f4ef; background-image: none; }
 @page cover { margin: 0; }
-html { background: #f6f4ef; }
 .dd-print .dd-cover { height: 297mm; }
+:root { --dd-light: #f6f4ef; --dd-dark: #1c2127; }
+@media print { .dd-book-root, .dd-book-root body { background: transparent !important; } }
+@media screen { .dd-book-root { background-color: #f6f4ef; background-image: none; background-attachment: fixed; } .dd-book-root body { background: transparent; } }
+.dd-book {  }
+.dd-cover { background-color: #1c2127; background-image: none; --dd-ink: var(--dd-light); --dd-muted: color-mix(in oklab, var(--dd-ink) 68%, transparent); --dd-rule: color-mix(in oklab, var(--dd-ink) 22%, transparent); --dd-surface: color-mix(in oklab, var(--dd-ink) 8%, transparent); --dd-accent-tint: color-mix(in oklab, var(--dd-accent) 30%, transparent); --dd-accent2-tint: color-mix(in oklab, var(--dd-accent2) 30%, transparent); --dd-attention-tint: color-mix(in oklab, var(--dd-attention) 30%, transparent); --dd-muted-tint: color-mix(in oklab, var(--dd-ink) 12%, transparent); --dd-attention-ink: var(--dd-ink); --dd-emphasis: color-mix(in oklab, var(--dd-accent) 38%, var(--dd-light)); color: var(--dd-ink); }
+.dd-slide { background-color: #f6f4ef; background-image: none; }
+.dd-slide.dd-slide-chapter { background-color: #2b5d8a; background-image: none; --dd-ink: var(--dd-light); --dd-muted: color-mix(in oklab, var(--dd-ink) 68%, transparent); --dd-rule: color-mix(in oklab, var(--dd-ink) 22%, transparent); --dd-surface: color-mix(in oklab, var(--dd-ink) 8%, transparent); --dd-accent-tint: color-mix(in oklab, var(--dd-accent) 30%, transparent); --dd-accent2-tint: color-mix(in oklab, var(--dd-accent2) 30%, transparent); --dd-attention-tint: color-mix(in oklab, var(--dd-attention) 30%, transparent); --dd-muted-tint: color-mix(in oklab, var(--dd-ink) 12%, transparent); --dd-attention-ink: var(--dd-ink); --dd-emphasis: color-mix(in oklab, var(--dd-accent) 38%, var(--dd-light)); color: var(--dd-ink); }
+.dd-slide.dd-slide-cover { background-color: transparent; background-image: linear-gradient(135deg, #1c2127 0%, #1c2127 45%, #2b5d8a 100%); background-size: 100% 100%; background-position: center; background-repeat: no-repeat; --dd-ink: var(--dd-light); --dd-muted: color-mix(in oklab, var(--dd-ink) 68%, transparent); --dd-rule: color-mix(in oklab, var(--dd-ink) 22%, transparent); --dd-surface: color-mix(in oklab, var(--dd-ink) 8%, transparent); --dd-accent-tint: color-mix(in oklab, var(--dd-accent) 30%, transparent); --dd-accent2-tint: color-mix(in oklab, var(--dd-accent2) 30%, transparent); --dd-attention-tint: color-mix(in oklab, var(--dd-attention) 30%, transparent); --dd-muted-tint: color-mix(in oklab, var(--dd-ink) 12%, transparent); --dd-attention-ink: var(--dd-ink); --dd-emphasis: color-mix(in oklab, var(--dd-accent) 38%, var(--dd-light)); color: var(--dd-ink); }
 </style>
 </head>
 <body class="dd-book">
 
 <section class="dd-cover">
 <div class="dd-cover-inner">
-  <div class="dd-cover-brand"><img class="dd-logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNDAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCAzNDAgODAiPgogIDxyZWN0IHg9IjQiIHk9IjE0IiB3aWR0aD0iNTIiIGhlaWdodD0iNDAiIHJ4PSI1IiBmaWxsPSIjMmI1ZDhhIi8+CiAgPHJlY3QgeD0iMjIiIHk9IjI2IiB3aWR0aD0iNDAiIGhlaWdodD0iNTAiIHJ4PSI0IiBmaWxsPSIjZmZmZWZiIiBzdHJva2U9IiMxYzIxMjciIHN0cm9rZS13aWR0aD0iMyIvPgogIDxsaW5lIHgxPSIzMCIgeTE9IjQwIiB4Mj0iNTQiIHkyPSI0MCIgc3Ryb2tlPSIjMmY2ZjVhIiBzdHJva2Utd2lkdGg9IjMiLz4KICA8bGluZSB4MT0iMzAiIHkxPSI1MCIgeDI9IjU0IiB5Mj0iNTAiIHN0cm9rZT0iIzFjMjEyNyIgc3Ryb2tlLXdpZHRoPSIyLjUiIG9wYWNpdHk9IjAuNSIvPgogIDxsaW5lIHgxPSIzMCIgeTE9IjU5IiB4Mj0iNDgiIHkyPSI1OSIgc3Ryb2tlPSIjMWMyMTI3IiBzdHJva2Utd2lkdGg9IjIuNSIgb3BhY2l0eT0iMC41Ii8+CiAgPHRleHQgeD0iODAiIHk9IjU2IiBmb250LWZhbWlseT0iR2VvcmdpYSwgJ1RpbWVzIE5ldyBSb21hbicsIHNlcmlmIiBmb250LXNpemU9IjQwIiBmb250LXdlaWdodD0iNjAwIiBmaWxsPSIjMWMyMTI3Ij5kb2NkZWNrPC90ZXh0Pgo8L3N2Zz4K" alt="docdeck"></div>
+  <div class="dd-cover-brand"><img class="dd-logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNDAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCAzNDAgODAiPgogIDxyZWN0IHg9IjQiIHk9IjE0IiB3aWR0aD0iNTIiIGhlaWdodD0iNDAiIHJ4PSI1IiBmaWxsPSIjNmY5ZmNiIi8+CiAgPHJlY3QgeD0iMjIiIHk9IjI2IiB3aWR0aD0iNDAiIGhlaWdodD0iNTAiIHJ4PSI0IiBmaWxsPSIjMWMyMTI3IiBzdHJva2U9IiNmNmY0ZWYiIHN0cm9rZS13aWR0aD0iMyIvPgogIDxsaW5lIHgxPSIzMCIgeTE9IjQwIiB4Mj0iNTQiIHkyPSI0MCIgc3Ryb2tlPSIjN2ZjM2E4IiBzdHJva2Utd2lkdGg9IjMiLz4KICA8bGluZSB4MT0iMzAiIHkxPSI1MCIgeDI9IjU0IiB5Mj0iNTAiIHN0cm9rZT0iI2Y2ZjRlZiIgc3Ryb2tlLXdpZHRoPSIyLjUiIG9wYWNpdHk9IjAuNiIvPgogIDxsaW5lIHgxPSIzMCIgeTE9IjU5IiB4Mj0iNDgiIHkyPSI1OSIgc3Ryb2tlPSIjZjZmNGVmIiBzdHJva2Utd2lkdGg9IjIuNSIgb3BhY2l0eT0iMC42Ii8+CiAgPHRleHQgeD0iODAiIHk9IjU2IiBmb250LWZhbWlseT0iR2VvcmdpYSwgJ1RpbWVzIE5ldyBSb21hbicsIHNlcmlmIiBmb250LXNpemU9IjQwIiBmb250LXdlaWdodD0iNjAwIiBmaWxsPSIjZjZmNGVmIj5kb2NkZWNrPC90ZXh0Pgo8L3N2Zz4K" alt="docdeck"></div>
   <div class="dd-cover-title">
     <div class="dd-kicker">docdeck</div>
     <h1>The client document engine</h1>
@@ -290,7 +300,7 @@ html { background: #f6f4ef; }
         <span class="dd-toc-page">6</span>
       </a>
       
-      <ul class="dd-toc-sections"><li><a href="#customising-eight-roles">Eight roles</a></li><li><a href="#customising-one-config-file">One config file</a></li><li><a href="#customising-three-levels-of-change">Three levels of change</a></li></ul>
+      <ul class="dd-toc-sections"><li><a href="#customising-eight-roles">Eight roles</a></li><li><a href="#customising-one-config-file">One config file</a></li><li><a href="#customising-backgrounds">Backgrounds</a></li><li><a href="#customising-three-levels-of-change">Three levels of change</a></li></ul>
       
     </li>
   
@@ -298,7 +308,7 @@ html { background: #f6f4ef; }
       <a href="#ch-writing-chapters">
         <span class="dd-toc-n">04</span>
         <span class="dd-toc-body"><span class="dd-toc-title">Writing chapters</span><span class="dd-toc-summary">Plain Markdown, one file per chapter, one slide per section.</span></span>
-        <span class="dd-toc-page">8</span>
+        <span class="dd-toc-page">9</span>
       </a>
       
       <ul class="dd-toc-sections"><li><a href="#writing-chapters-blocks">Blocks</a></li><li><a href="#writing-chapters-deep-in-the-book-brief-in-the-deck">Deep in the book, brief in the deck</a></li></ul>
@@ -309,7 +319,7 @@ html { background: #f6f4ef; }
       <a href="#ch-data-and-screens">
         <span class="dd-toc-n">05</span>
         <span class="dd-toc-body"><span class="dd-toc-title">Data and screenshots</span><span class="dd-toc-summary">Tables are read from the project&#39;s code, and screens are captured from the running app.</span></span>
-        <span class="dd-toc-page">10</span>
+        <span class="dd-toc-page">11</span>
       </a>
       
       <ul class="dd-toc-sections"><li><a href="#data-and-screens-providers">Providers</a></li><li><a href="#data-and-screens-screenshots">Screenshots</a></li></ul>
@@ -320,7 +330,7 @@ html { background: #f6f4ef; }
       <a href="#ch-keeping-it-current">
         <span class="dd-toc-n">06</span>
         <span class="dd-toc-body"><span class="dd-toc-title">Keeping it current</span><span class="dd-toc-summary">Chapters describe the product as it is today, and the check keeps history out.</span></span>
-        <span class="dd-toc-page">11</span>
+        <span class="dd-toc-page">12</span>
       </a>
       
       <ul class="dd-toc-sections"><li><a href="#keeping-it-current-what-the-check-catches">What the check catches</a></li><li><a href="#keeping-it-current-slides-that-fit">Slides that fit</a></li><li><a href="#keeping-it-current-page-numbers-that-are-right">Page numbers that are right</a></li></ul>
@@ -331,7 +341,7 @@ html { background: #f6f4ef; }
       <a href="#ch-the-skill">
         <span class="dd-toc-n">07</span>
         <span class="dd-toc-body"><span class="dd-toc-title">The Claude Code skill</span><span class="dd-toc-summary">Ask for the client deck in plain words; the skill writes the chapters and runs the engine.</span></span>
-        <span class="dd-toc-page">12</span>
+        <span class="dd-toc-page">13</span>
       </a>
       
       <ul class="dd-toc-sections"><li><a href="#the-skill-what-the-skill-does">What the skill does</a></li><li><a href="#the-skill-shaped-to-each-project">Shaped to each project</a></li><li><a href="#the-skill-installing">Installing</a></li></ul>
@@ -342,7 +352,7 @@ html { background: #f6f4ef; }
       <a href="#ch-roadmap">
         <span class="dd-toc-n">08</span>
         <span class="dd-toc-body"><span class="dd-toc-title">What comes next</span><span class="dd-toc-summary">The enhancements planned, in order of value.</span></span>
-        <span class="dd-toc-page">14</span>
+        <span class="dd-toc-page">15</span>
       </a>
       
     </li>
@@ -362,7 +372,7 @@ html { background: #f6f4ef; }
 <div class="dd-cards"><div class="dd-card dd-tone-accent"><span class="dd-tag">16:9</span><h4>deck.pdf</h4><p>Slides to present or send. One slide per section, text fitted to the slide.</p></div><div class="dd-card dd-tone-accent"><span class="dd-tag">Browser</span><h4>deck.html</h4><p>The same slides, presented with arrow keys and full screen.</p></div><div class="dd-card dd-tone-accent2"><span class="dd-tag">A4</span><h4>book.pdf</h4><p>The full document: cover, index with page numbers, running footers, bookmarks.</p></div><div class="dd-card dd-tone-accent2"><span class="dd-tag">Browser</span><h4>book.html</h4><p>The same document as one page, index linked to each chapter.</p></div></div><div class="dd-block-note"></div><h2 id="what-docdeck-is-the-loop" tabindex="-1">The loop</h2>
 <figure class="dd-flow-block"><ol class="dd-flow" style="--dd-steps: 4"><li class="dd-step"><span class="dd-step-n">01</span><span class="dd-step-label">Write or edit a chapter</span></li><li class="dd-step"><span class="dd-step-n">02</span><span class="dd-step-label">Check</span></li><li class="dd-step"><span class="dd-step-n">03</span><span class="dd-step-label">Build</span></li><li class="dd-step"><span class="dd-step-n">04</span><span class="dd-step-label">Share the PDFs</span></li></ol><div class="dd-block-note"></div></figure><p>When the product changes, you edit the chapter itself. There is no list of changes to maintain: each edition is the current truth, dated on the cover.</p>
 <h2 id="what-docdeck-is-in-numbers" tabindex="-1">In numbers</h2>
-<div class="dd-stats"><div class="dd-stat dd-tone-accent"><span class="dd-stat-value">10</span><span class="dd-stat-label">content blocks</span></div><div class="dd-stat dd-tone-accent2"><span class="dd-stat-value">8</span><span class="dd-stat-label">theme roles to map</span></div><div class="dd-stat dd-tone-muted"><span class="dd-stat-value">13</span><span class="dd-stat-label">settings in one config file</span></div><div class="dd-stat dd-tone-attention"><span class="dd-stat-value">4</span><span class="dd-stat-label">files from one build</span></div></div><div class="dd-block-note"></div></div>
+<div class="dd-stats"><div class="dd-stat dd-tone-accent"><span class="dd-stat-value">10</span><span class="dd-stat-label">content blocks</span></div><div class="dd-stat dd-tone-accent2"><span class="dd-stat-value">8</span><span class="dd-stat-label">theme roles to map</span></div><div class="dd-stat dd-tone-muted"><span class="dd-stat-value">14</span><span class="dd-stat-label">settings in one config file</span></div><div class="dd-stat dd-tone-attention"><span class="dd-stat-value">4</span><span class="dd-stat-label">files from one build</span></div></div><div class="dd-block-note"></div></div>
 </article>
 
 <article class="dd-chapter" id="ch-setting-up">
@@ -418,7 +428,10 @@ html { background: #f6f4ef; }
   <div class="dd-prose"><h2 id="customising-eight-roles" tabindex="-1">Eight roles</h2>
 <p>Every colour in docdeck’s templates is one of eight roles. A project maps its own design tokens onto them, and nothing else needs to change.</p>
 <figure class="dd-table-block"><div class="dd-table-wrap"><table><thead><tr><th>Role</th><th>Used for</th><th>Neutral default</th></tr></thead><tbody><tr><td><code>paper</code></td><td>Page ground</td><td><code>#f7f7f5</code></td></tr><tr><td><code>ink</code></td><td>Text</td><td><code>#1a1d24</code></td></tr><tr><td><code>surface</code></td><td>Cards and tables</td><td><code>#ffffff</code></td></tr><tr><td><code>accent</code></td><td>Links, the current step, chapter rules</td><td><code>#2f4f7f</code></td></tr><tr><td><code>accent2</code></td><td>The other side of a comparison</td><td><code>#2e6b5e</code></td></tr><tr><td><code>attention</code></td><td>Decisions and warnings</td><td><code>#b0782b</code></td></tr><tr><td><code>rule</code></td><td>Hairlines</td><td><code>#d6d3cc</code></td></tr><tr><td><code>muted</code></td><td>Secondary text</td><td><code>#5d6270</code></td></tr></tbody></table></div><div class="dd-block-note"></div></figure><h2 id="customising-one-config-file" tabindex="-1">One config file</h2>
-<figure class="dd-table-block dd-narrow"><div class="dd-table-wrap"><table><thead><tr><th>Setting</th><th>Changes</th></tr></thead><tbody><tr><td><code>root</code></td><td>Where paths start</td></tr><tr><td><code>project</code></td><td>Name, title, tagline, audience, edition date</td></tr><tr><td><code>brand</code></td><td>Logo, logo on dark, footer mark</td></tr><tr><td><code>theme</code></td><td>Colour tokens and fonts</td></tr><tr><td><code>chapters</code></td><td>Chapters folder</td></tr><tr><td><code>providers</code></td><td>Data providers file</td></tr><tr><td><code>templates</code></td><td>Replacement templates</td></tr><tr><td><code>screens</code></td><td>App address, sign-in and screens to capture</td></tr><tr><td><code>styles</code></td><td>Extra stylesheets</td></tr><tr><td><code>book</code></td><td>Page size, margins, footer</td></tr><tr><td><code>labels</code></td><td>Words on the cover and index</td></tr><tr><td><code>out</code></td><td>Output folder</td></tr><tr><td><code>outputs</code></td><td>Deck, book, or both</td></tr></tbody></table></div><div class="dd-block-note"></div></figure><h2 id="customising-three-levels-of-change" tabindex="-1">Three levels of change</h2>
+<figure class="dd-table-block dd-narrow"><div class="dd-table-wrap"><table><thead><tr><th>Setting</th><th>Changes</th></tr></thead><tbody><tr><td><code>root</code></td><td>Where paths start</td></tr><tr><td><code>project</code></td><td>Name, title, tagline, audience, edition date</td></tr><tr><td><code>brand</code></td><td>Logo, logo on dark, footer mark</td></tr><tr><td><code>theme</code></td><td>Colour tokens and fonts</td></tr><tr><td><code>chapters</code></td><td>Chapters folder</td></tr><tr><td><code>providers</code></td><td>Data providers file</td></tr><tr><td><code>templates</code></td><td>Replacement templates</td></tr><tr><td><code>screens</code></td><td>App address, sign-in and screens to capture</td></tr><tr><td><code>background</code></td><td><span class="dd-no">–</span></td></tr><tr><td><code>styles</code></td><td>Extra stylesheets</td></tr><tr><td><code>book</code></td><td>Page size, margins, footer</td></tr><tr><td><code>labels</code></td><td>Words on the cover and index</td></tr><tr><td><code>out</code></td><td>Output folder</td></tr><tr><td><code>outputs</code></td><td>Deck, book, or both</td></tr></tbody></table></div><div class="dd-block-note"></div></figure><h2 id="customising-backgrounds" tabindex="-1">Backgrounds</h2>
+<p>Every surface can have its own background: a theme role, a colour, a gradient, an image with an overlay, or a tiled pattern. Text turns light by itself on a dark ground, and a dark cover picks the light logo.</p>
+<div class="dd-cards"><div class="dd-card dd-tone-accent"><span class="dd-tag">&quot;ink&quot;</span><h4>A role or colour</h4><p>Any theme role, or any CSS colour.</p></div><div class="dd-card dd-tone-accent"><span class="dd-tag">linear-gradient(…)</span><h4>A gradient</h4><p>Any CSS gradient, drawn edge to edge.</p></div><div class="dd-card dd-tone-accent2"><span class="dd-tag">{ image, overlay }</span><h4>An image</h4><p>Cover-fitted, with an optional overlay to keep text readable.</p></div><div class="dd-card dd-tone-accent2"><span class="dd-tag">{ image, repeat }</span><h4>A pattern</h4><p>A small image tiled across the surface.</p></div></div><div class="dd-block-note"></div><figure class="dd-table-block"><div class="dd-table-wrap"><table><thead><tr><th>Surface</th><th>Covers</th><th>Default</th></tr></thead><tbody><tr><td><code>page</code></td><td>Every book page, edge to edge</td><td><code>paper</code></td></tr><tr><td><code>cover</code></td><td>The book’s cover</td><td><code>paper</code></td></tr><tr><td><code>slide</code></td><td>Every slide</td><td><code>paper</code></td></tr><tr><td><code>deckCover</code></td><td>The first slide</td><td><code>ink</code></td></tr><tr><td><code>chapter</code></td><td>Chapter opening slides</td><td><code>paper</code></td></tr></tbody></table></div><div class="dd-block-note"></div></figure><p>This document uses three: a gradient on the deck’s cover, the accent blue on chapter openers, and ink on the book cover.</p>
+<h2 id="customising-three-levels-of-change" tabindex="-1">Three levels of change</h2>
 <div class="dd-cards dd-cards-inline"><ul>
 <li><strong>Settings</strong> Colours, fonts, logo, page size, margins, footer and labels, all in the config.</li>
 <li><strong>Styles</strong> An extra stylesheet for spacing, headings or table rules, using the theme roles.</li>

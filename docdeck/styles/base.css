@@ -6,6 +6,8 @@
   --dd-muted-tint: color-mix(in oklab, var(--dd-muted) 10%, var(--dd-surface));
   --dd-attention-ink: color-mix(in oklab, var(--dd-attention) 70%, var(--dd-ink));
   --dd-radius: 6px;
+  /* Accent-coloured details (chapter numbers, stripes). Lightened on dark grounds. */
+  --dd-emphasis: var(--dd-accent);
 }
 * { box-sizing: border-box; }
 html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }

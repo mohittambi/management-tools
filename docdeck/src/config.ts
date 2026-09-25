@@ -20,6 +20,20 @@ const fontSchema = z.union([
   }),
 ]);
 
+const backgroundSchema = z.union([
+  z.string(),
+  z.object({
+    color: z.string().optional(),
+    gradient: z.string().optional(),
+    image: z.string().optional(),
+    size: z.string().optional(),
+    position: z.string().optional(),
+    repeat: z.string().optional(),
+    overlay: z.string().optional(),
+    text: z.enum(["auto", "light", "dark"]).optional(),
+  }),
+]);
+
 const loginSchema = z.object({
   path: z.string().default("/login"),
   email: z.string(),
@@ -78,6 +92,19 @@ export const configSchema = z.object({
       shots: z.record(z.string(), shotSchema).default({}),
     })
     .optional(),
+  /**
+   * Backgrounds per surface: a theme role ("ink"), a colour, a CSS gradient,
+   * or { color, gradient, image, size, position, repeat, overlay, text }.
+   */
+  background: z
+    .object({
+      page: backgroundSchema.optional(),
+      cover: backgroundSchema.optional(),
+      slide: backgroundSchema.optional(),
+      deckCover: backgroundSchema.optional(),
+      chapter: backgroundSchema.optional(),
+    })
+    .default({}),
   /** Extra stylesheets, applied after the engine's own. Use theme roles (--dd-*). */
   styles: z.array(z.string()).default([]),
   book: z

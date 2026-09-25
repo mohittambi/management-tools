@@ -1,6 +1,6 @@
 // Data for docdeck's own document, read from the engine's code so the
 // document describes the engine that built it.
-import { BLOCKS, DEFAULT_TOKENS, LINT_RULES, THEME_ROLES, defineProviders, type Cell } from "docdeck";
+import { BLOCKS, DEFAULT_BACKGROUNDS, DEFAULT_TOKENS, LINT_RULES, SURFACES, THEME_ROLES, defineProviders, type Cell } from "docdeck";
 import { configSchema } from "../docdeck/src/config.ts";
 
 const ROLE_USE: Record<(typeof THEME_ROLES)[number], string> = {
@@ -97,6 +97,20 @@ export default defineProviders({
     { value: THEME_ROLES.length, label: "theme roles to map", tone: "accent2" },
     { value: Object.keys(configSchema.shape).length, label: "settings in one config file", tone: "muted" },
     { value: 4, label: "files from one build", tone: "attention" },
+  ],
+  surfaces: () => ({
+    columns: ["Surface", "Covers", "Default"],
+    rows: SURFACES.map((s) => [
+      { code: s },
+      { page: "Every book page, edge to edge", cover: "The book's cover", slide: "Every slide", deckCover: "The first slide", chapter: "Chapter opening slides" }[s],
+      { code: typeof DEFAULT_BACKGROUNDS[s] === "string" ? (DEFAULT_BACKGROUNDS[s] as string) : "custom" },
+    ]),
+  }),
+  backgroundKinds: [
+    { title: "A role or colour", tag: "\"ink\"", tone: "accent", body: "Any theme role, or any CSS colour." },
+    { title: "A gradient", tag: "linear-gradient(…)", tone: "accent", body: "Any CSS gradient, drawn edge to edge." },
+    { title: "An image", tag: "{ image, overlay }", tone: "accent2", body: "Cover-fitted, with an optional overlay to keep text readable." },
+    { title: "A pattern", tag: "{ image, repeat }", tone: "accent2", body: "A small image tiled across the surface." },
   ],
   roadmap: {
     columns: ["Next", "Why"],

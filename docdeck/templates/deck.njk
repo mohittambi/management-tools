@@ -12,7 +12,7 @@
 {% for s in slides %}
 <section class="dd-slide dd-slide-{{ s.kind }}" id="slide-{{ loop.index }}" data-label="{{ s.label }}">
   {% if s.kind == "cover" %}
-    {{ m.cover(project, logoOnDark or logo, labels) }}
+    {{ m.cover(project, coverLogo, labels) }}
   {% elif s.kind == "index" %}
     <div class="dd-slide-body">
       <div class="dd-kicker">{{ labels.contents }}</div>

@@ -4,6 +4,7 @@ export { build, check } from "./build.ts";
 export { BLOCKS } from "./blocks/index.ts";
 export { LINT_RULES } from "./content.ts";
 export { DEFAULT_TOKENS } from "./theme.ts";
+export { DEFAULT_BACKGROUNDS, SURFACES, type BackgroundSpec } from "./background.ts";
 
 /** Typed helper for a project's providers.ts. */
 export function defineProviders<T extends Record<string, unknown>>(providers: T): T {

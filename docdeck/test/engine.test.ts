@@ -9,7 +9,8 @@ import { forMode, lintChapter, referencedScreens, referencedSources, splitSectio
 import { createMarkdown } from "../src/markdown.ts";
 import { footerText, sideMargins, startPages } from "../src/pdf.ts";
 import { asTable } from "../src/providers.ts";
-import { parseCssVars } from "../src/theme.ts";
+import { parseCssVars, DEFAULT_TOKENS } from "../src/theme.ts";
+import { backgroundCss, luminance, resolveBackground } from "../src/background.ts";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const fixture = join(here, "fixtures", "project");
@@ -107,6 +108,38 @@ describe("blocks", () => {
   });
 });
 
+describe("backgrounds", () => {
+  const path = (p: string) => join(fixture, p);
+  it("reads a role, a colour or a gradient from a plain string", () => {
+    expect(resolveBackground("ink", DEFAULT_TOKENS, path).color).toBe(DEFAULT_TOKENS.ink);
+    expect(resolveBackground("#fff8e7", DEFAULT_TOKENS, path).text).toBe("dark");
+    const g = resolveBackground("linear-gradient(135deg, #102030, #2f4f7f)", DEFAULT_TOKENS, path);
+    expect(g.layers[0].image).toContain("linear-gradient");
+    expect(g.text).toBe("light");
+  });
+  it("stacks overlay over image and judges text by the overlay", () => {
+    const b = resolveBackground({ image: "logo.png", overlay: "rgba(0,0,0,0.55)", size: "40px", repeat: "repeat" }, DEFAULT_TOKENS, path);
+    expect(b.layers.map((l) => l.image.slice(0, 15))).toEqual(["linear-gradient", 'url("data:image']);
+    expect(b.layers[1]).toMatchObject({ size: "40px", repeat: "repeat" });
+    expect(b.text).toBe("light");
+    expect(resolveBackground({ color: "ink", text: "dark" }, DEFAULT_TOKENS, path).text).toBe("dark");
+  });
+  it("flips text only on surfaces that turn against the theme", () => {
+    const { css, dark } = backgroundCss({ chapter: "accent" }, DEFAULT_TOKENS, path);
+    expect(dark).toMatchObject({ page: false, slide: false, chapter: true, deckCover: true });
+    expect(css).toMatch(/\.dd-slide\.dd-slide-chapter \{[^}]*--dd-ink: var\(--dd-light\)/);
+    expect(css).not.toMatch(/\.dd-slide \{[^}]*--dd-ink/);
+  });
+  it("fails loudly on a missing image", () => {
+    expect(() => resolveBackground({ image: "nope.png" }, DEFAULT_TOKENS, path)).toThrow(/not found/);
+  });
+  it("measures luminance", () => {
+    expect(luminance("#ffffff")).toBeCloseTo(1);
+    expect(luminance("rgb(0, 0, 0)")).toBe(0);
+    expect(luminance("oklch(0.5 0.1 200)")).toBeNull();
+  });
+});
+
 describe("index page numbers", () => {
   it("numbers from the cover like a printed book", () => {
     const { starts, total } = startPages(1, 2, [
@@ -152,6 +185,11 @@ describe("docdeck build (fixture project, real Chromium)", () => {
       const book = await PDFDocument.load(readFileSync(join(dist, "book.pdf")));
       expect(book.getPageCount()).toBeGreaterThanOrEqual(4);
       expect(book.catalog.get(PDFName.of("Outlines")), "bookmarks").toBeDefined();
+
+      const deckHtml = readFileSync(join(dist, "deck.html"), "utf8");
+      expect(deckHtml).toContain("linear-gradient(135deg, #101820, #7a2e8c)");
+      expect(deckHtml).toMatch(/\.dd-slide\.dd-slide-chapter \{[^}]*--dd-ink: var\(--dd-light\)/);
+      expect(bookHtml).toMatch(/@page \{[^}]*background-repeat: repeat/);
 
       const deck = await PDFDocument.load(readFileSync(join(dist, "deck.pdf")));
       // cover + index + 2 chapter openers + 6 sections

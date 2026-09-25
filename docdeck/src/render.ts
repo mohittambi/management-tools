@@ -37,8 +37,12 @@ export type Labels = { contents: string; index: string; chapter: string; prepare
 export type RenderInput = {
   project: Project;
   labels: Labels;
-  /** Page size, margins and colour for the printed book. */
-  page: { size: string; margin: string; paper: string };
+  /** Page size and margins for the printed book, and its page background. */
+  page: { size: string; margin: string; background: string };
+  /** Background CSS for every surface (see background.ts). */
+  backgroundCss: string;
+  /** Surfaces whose background is dark, so the light logo is used there. */
+  dark: { cover: boolean; deckCover: boolean };
   /** Project stylesheets, applied last. */
   extraCss: string;
   logo: string | null;
@@ -92,19 +96,18 @@ function env(templatesDir?: string) {
 }
 
 function css(input: RenderInput, extra: string) {
-  return [input.css.fonts, input.css.theme, input.css.base, extra, input.extraCss].join("\n");
+  return [input.css.fonts, input.css.theme, input.css.base, extra, input.backgroundCss, input.extraCss].join("\n");
 }
 
 const PAGE_HEIGHT: Record<string, string> = { a4: "297mm", a5: "210mm", a3: "420mm", letter: "279.4mm", legal: "355.6mm" };
 
 /** Page rules need literal values; custom properties do not reach @page. */
 function pageCss(input: RenderInput) {
-  const { size, margin, paper } = input.page;
+  const { size, margin, background } = input.page;
   const height = PAGE_HEIGHT[size.trim().split(/\s+/)[0].toLowerCase()] ?? "100vh";
   return [
-    `@page { size: ${size}; margin: ${margin}; background: ${paper}; }`,
+    `@page { size: ${size}; margin: ${margin}; ${background} }`,
     "@page cover { margin: 0; }",
-    `html { background: ${paper}; }`,
     `.dd-print .dd-cover { height: ${height}; }`,
   ].join("\n");
 }
@@ -121,7 +124,7 @@ export function renderBook(
   const chapters = parts.chapters === "all" ? bookChapters : bookChapters.filter((c) => (parts.chapters as number[]).includes(c.number));
   return env(input.templatesDir).render("book.njk", {
     project: input.project,
-    logo: input.logo,
+    logo: input.dark.cover ? (input.logoOnDark ?? input.logo) : input.logo,
     css: css(input, readFileSync(engineFile("styles", "book.css"), "utf8") + "\n" + pageCss(input)),
     print: Boolean(opts.print),
     labels: input.labels,
@@ -152,7 +155,7 @@ export function renderDeck(rendered: RenderedChapter[], input: RenderInput, opts
   return env(input.templatesDir).render("deck.njk", {
     project: input.project,
     logo: input.logo,
-    logoOnDark: input.logoOnDark,
+    coverLogo: input.dark.deckCover ? (input.logoOnDark ?? input.logo) : input.logo,
     mark: input.mark,
     css: css(input, readFileSync(engineFile("styles", "deck.css"), "utf8")),
     print: Boolean(opts.print),

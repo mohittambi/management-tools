@@ -39,6 +39,8 @@
   --dd-muted-tint: color-mix(in oklab, var(--dd-muted) 10%, var(--dd-surface));
   --dd-attention-ink: color-mix(in oklab, var(--dd-attention) 70%, var(--dd-ink));
   --dd-radius: 6px;
+  /* Accent-coloured details (chapter numbers, stripes). Lightened on dark grounds. */
+  --dd-emphasis: var(--dd-accent);
 }
 * { box-sizing: border-box; }
 html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -207,7 +209,6 @@ figcaption { font-family: var(--dd-font-mono); font-size: 0.78em; letter-spacing
   --dd-fit: 1;
   width: 1600px; height: 900px; flex: none;
   position: relative; overflow: hidden;
-  background: var(--dd-paper);
   font-size: calc(24px * var(--dd-fit));
   line-height: 1.5;
   padding: 72px 96px 96px;
@@ -243,28 +244,26 @@ figcaption { font-family: var(--dd-font-mono); font-size: 0.78em; letter-spacing
 .dd-slide-mark.dd-wide { width: 110px; }
 .dd-slide-n { font-variant-numeric: tabular-nums; }
 
-/* Cover slide: ink ground */
-.dd-slide-cover { background: var(--dd-ink); color: var(--dd-paper); padding: 88px 110px; }
-.dd-slide-cover h1 { color: var(--dd-paper); font-size: 3.4em; }
-.dd-slide-cover .dd-kicker, .dd-slide-cover .dd-tagline, .dd-slide-cover .dd-cover-meta dt { color: color-mix(in oklab, var(--dd-paper) 70%, var(--dd-ink)); }
+/* Cover slide. Its background and text colours come from background.deckCover. */
+.dd-slide-cover { padding: 88px 110px; }
+.dd-slide-cover h1 { font-size: 3.4em; }
 .dd-slide-cover .dd-cover-brand .dd-logo { height: 64px; }
-.dd-slide-cover .dd-wordmark { color: var(--dd-paper); }
-.dd-slide-cover::after { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 18px; background: var(--dd-accent); }
+.dd-slide-cover::after { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 18px; background: var(--dd-emphasis); }
 
 /* Index slide */
 .dd-deck-toc { list-style: none; margin: 0.4em 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0 3em; }
 .dd-deck-toc li a { display: grid; grid-template-columns: 2.2em 1fr auto; gap: 0.6em; padding: 0.45em 0; border-bottom: 1px solid var(--dd-rule); color: var(--dd-ink); font-size: 0.95em; }
-.dd-deck-toc .dd-toc-n { font-family: var(--dd-font-mono); color: var(--dd-accent); font-weight: 600; }
+.dd-deck-toc .dd-toc-n { font-family: var(--dd-font-mono); color: var(--dd-emphasis); font-weight: 600; }
 .dd-deck-toc .dd-toc-page { font-family: var(--dd-font-mono); color: var(--dd-muted); }
 
 /* Chapter opener */
 .dd-slide-chapter .dd-slide-body { justify-content: center; }
-.dd-chapter-n { font-family: var(--dd-font-mono); font-size: 1.1em; color: var(--dd-accent); font-weight: 600; }
+.dd-chapter-n { font-family: var(--dd-font-mono); font-size: 1.1em; color: var(--dd-emphasis); font-weight: 600; }
 .dd-chapter-title { font-size: 2.6em !important; }
 .dd-slide-chapter .dd-lede { font-size: 1.05em; }
 .dd-chapter-agenda { margin: 0.6em 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 0.4em 0.5em; font-size: 0.72em; }
 .dd-chapter-agenda li { border: 1px solid var(--dd-rule); border-radius: 3px; padding: 0.15em 0.7em; color: var(--dd-muted); background: var(--dd-surface); }
-.dd-slide-chapter::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 12px; background: var(--dd-accent); }
+.dd-slide-chapter::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 12px; background: var(--dd-emphasis); }
 
 /* Presenter nav */
 .dd-deck-nav {
@@ -276,6 +275,14 @@ figcaption { font-family: var(--dd-font-mono); font-size: 0.78em; letter-spacing
 .dd-deck-pos { padding: 0 6px; font-variant-numeric: tabular-nums; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
+:root { --dd-light: #f6f4ef; --dd-dark: #1c2127; }
+@media print { .dd-book-root, .dd-book-root body { background: transparent !important; } }
+@media screen { .dd-book-root { background-color: #f6f4ef; background-image: none; background-attachment: fixed; } .dd-book-root body { background: transparent; } }
+.dd-book {  }
+.dd-cover { background-color: #1c2127; background-image: none; --dd-ink: var(--dd-light); --dd-muted: color-mix(in oklab, var(--dd-ink) 68%, transparent); --dd-rule: color-mix(in oklab, var(--dd-ink) 22%, transparent); --dd-surface: color-mix(in oklab, var(--dd-ink) 8%, transparent); --dd-accent-tint: color-mix(in oklab, var(--dd-accent) 30%, transparent); --dd-accent2-tint: color-mix(in oklab, var(--dd-accent2) 30%, transparent); --dd-attention-tint: color-mix(in oklab, var(--dd-attention) 30%, transparent); --dd-muted-tint: color-mix(in oklab, var(--dd-ink) 12%, transparent); --dd-attention-ink: var(--dd-ink); --dd-emphasis: color-mix(in oklab, var(--dd-accent) 38%, var(--dd-light)); color: var(--dd-ink); }
+.dd-slide { background-color: #f6f4ef; background-image: none; }
+.dd-slide.dd-slide-chapter { background-color: #2b5d8a; background-image: none; --dd-ink: var(--dd-light); --dd-muted: color-mix(in oklab, var(--dd-ink) 68%, transparent); --dd-rule: color-mix(in oklab, var(--dd-ink) 22%, transparent); --dd-surface: color-mix(in oklab, var(--dd-ink) 8%, transparent); --dd-accent-tint: color-mix(in oklab, var(--dd-accent) 30%, transparent); --dd-accent2-tint: color-mix(in oklab, var(--dd-accent2) 30%, transparent); --dd-attention-tint: color-mix(in oklab, var(--dd-attention) 30%, transparent); --dd-muted-tint: color-mix(in oklab, var(--dd-ink) 12%, transparent); --dd-attention-ink: var(--dd-ink); --dd-emphasis: color-mix(in oklab, var(--dd-accent) 38%, var(--dd-light)); color: var(--dd-ink); }
+.dd-slide.dd-slide-cover { background-color: transparent; background-image: linear-gradient(135deg, #1c2127 0%, #1c2127 45%, #2b5d8a 100%); background-size: 100% 100%; background-position: center; background-repeat: no-repeat; --dd-ink: var(--dd-light); --dd-muted: color-mix(in oklab, var(--dd-ink) 68%, transparent); --dd-rule: color-mix(in oklab, var(--dd-ink) 22%, transparent); --dd-surface: color-mix(in oklab, var(--dd-ink) 8%, transparent); --dd-accent-tint: color-mix(in oklab, var(--dd-accent) 30%, transparent); --dd-accent2-tint: color-mix(in oklab, var(--dd-accent2) 30%, transparent); --dd-attention-tint: color-mix(in oklab, var(--dd-attention) 30%, transparent); --dd-muted-tint: color-mix(in oklab, var(--dd-ink) 12%, transparent); --dd-attention-ink: var(--dd-ink); --dd-emphasis: color-mix(in oklab, var(--dd-accent) 38%, var(--dd-light)); color: var(--dd-ink); }
 </style>
 <style>:root { --dd-mark: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgdmlld0JveD0iMCAwIDY0IDY0Ij4KICA8cmVjdCB4PSIyIiB5PSI2IiB3aWR0aD0iNDQiIGhlaWdodD0iMzQiIHJ4PSI1IiBmaWxsPSIjMmI1ZDhhIi8+CiAgPHJlY3QgeD0iMTYiIHk9IjE2IiB3aWR0aD0iMzYiIGhlaWdodD0iNDQiIHJ4PSI0IiBmaWxsPSIjZmZmZWZiIiBzdHJva2U9IiMxYzIxMjciIHN0cm9rZS13aWR0aD0iMyIvPgogIDxsaW5lIHgxPSIyMyIgeTE9IjI5IiB4Mj0iNDUiIHkyPSIyOSIgc3Ryb2tlPSIjMmY2ZjVhIiBzdHJva2Utd2lkdGg9IjMiLz4KICA8bGluZSB4MT0iMjMiIHkxPSIzOSIgeDI9IjQ1IiB5Mj0iMzkiIHN0cm9rZT0iIzFjMjEyNyIgc3Ryb2tlLXdpZHRoPSIyLjUiIG9wYWNpdHk9IjAuNSIvPgo8L3N2Zz4K"); }</style>
 </head>
@@ -315,15 +322,15 @@ figcaption { font-family: var(--dd-font-mono); font-size: 0.78em; letter-spacing
       
         <li><a href="#slide-10"><span class="dd-toc-n">03</span><span class="dd-toc-title">Customising the look</span><span class="dd-toc-page">10</span></a></li>
       
-        <li><a href="#slide-14"><span class="dd-toc-n">04</span><span class="dd-toc-title">Writing chapters</span><span class="dd-toc-page">14</span></a></li>
+        <li><a href="#slide-15"><span class="dd-toc-n">04</span><span class="dd-toc-title">Writing chapters</span><span class="dd-toc-page">15</span></a></li>
       
-        <li><a href="#slide-17"><span class="dd-toc-n">05</span><span class="dd-toc-title">Data and screenshots</span><span class="dd-toc-page">17</span></a></li>
+        <li><a href="#slide-18"><span class="dd-toc-n">05</span><span class="dd-toc-title">Data and screenshots</span><span class="dd-toc-page">18</span></a></li>
       
-        <li><a href="#slide-20"><span class="dd-toc-n">06</span><span class="dd-toc-title">Keeping it current</span><span class="dd-toc-page">20</span></a></li>
+        <li><a href="#slide-21"><span class="dd-toc-n">06</span><span class="dd-toc-title">Keeping it current</span><span class="dd-toc-page">21</span></a></li>
       
-        <li><a href="#slide-23"><span class="dd-toc-n">07</span><span class="dd-toc-title">The Claude Code skill</span><span class="dd-toc-page">23</span></a></li>
+        <li><a href="#slide-24"><span class="dd-toc-n">07</span><span class="dd-toc-title">The Claude Code skill</span><span class="dd-toc-page">24</span></a></li>
       
-        <li><a href="#slide-26"><span class="dd-toc-n">08</span><span class="dd-toc-title">What comes next</span><span class="dd-toc-page">26</span></a></li>
+        <li><a href="#slide-27"><span class="dd-toc-n">08</span><span class="dd-toc-title">What comes next</span><span class="dd-toc-page">27</span></a></li>
       
       </ol>
     </div>
@@ -395,7 +402,7 @@ figcaption { font-family: var(--dd-font-mono); font-size: 0.78em; letter-spacing
     <div class="dd-slide-body">
       <div class="dd-kicker">01 · What docdeck is</div>
       <h2>In numbers</h2>
-      <div class="dd-prose"><div class="dd-stats"><div class="dd-stat dd-tone-accent"><span class="dd-stat-value">10</span><span class="dd-stat-label">content blocks</span></div><div class="dd-stat dd-tone-accent2"><span class="dd-stat-value">8</span><span class="dd-stat-label">theme roles to map</span></div><div class="dd-stat dd-tone-muted"><span class="dd-stat-value">13</span><span class="dd-stat-label">settings in one config file</span></div><div class="dd-stat dd-tone-attention"><span class="dd-stat-value">4</span><span class="dd-stat-label">files from one build</span></div></div><div class="dd-block-note"></div></div>
+      <div class="dd-prose"><div class="dd-stats"><div class="dd-stat dd-tone-accent"><span class="dd-stat-value">10</span><span class="dd-stat-label">content blocks</span></div><div class="dd-stat dd-tone-accent2"><span class="dd-stat-value">8</span><span class="dd-stat-label">theme roles to map</span></div><div class="dd-stat dd-tone-muted"><span class="dd-stat-value">14</span><span class="dd-stat-label">settings in one config file</span></div><div class="dd-stat dd-tone-attention"><span class="dd-stat-value">4</span><span class="dd-stat-label">files from one build</span></div></div><div class="dd-block-note"></div></div>
     </div>
   
   
@@ -468,7 +475,7 @@ figcaption { font-family: var(--dd-font-mono); font-size: 0.78em; letter-spacing
       <p class="dd-lede">Map eight theme roles to the project&#39;s tokens and the whole document takes its colours, fonts and logo.</p>
       
       
-      <ol class="dd-chapter-agenda"><li>Eight roles</li><li>One config file</li><li>Three levels of change</li></ol>
+      <ol class="dd-chapter-agenda"><li>Eight roles</li><li>One config file</li><li>Backgrounds</li><li>Three levels of change</li></ol>
       
     </div>
   
@@ -514,7 +521,24 @@ figcaption { font-family: var(--dd-font-mono); font-size: 0.78em; letter-spacing
   
 </section>
 
-<section class="dd-slide dd-slide-section" id="slide-13" data-label="3. Customising the look › Three levels of change">
+<section class="dd-slide dd-slide-section" id="slide-13" data-label="3. Customising the look › Backgrounds">
+  
+    <div class="dd-slide-body">
+      <div class="dd-kicker">03 · Customising the look</div>
+      <h2>Backgrounds</h2>
+      <div class="dd-prose"><p>Every surface can have its own background: a theme role, a colour, a gradient, an image with an overlay, or a tiled pattern. Text turns light by itself on a dark ground, and a dark cover picks the light logo.</p>
+<div class="dd-cards"><div class="dd-card dd-tone-accent"><span class="dd-tag">&quot;ink&quot;</span><h4>A role or colour</h4><p>Any theme role, or any CSS colour.</p></div><div class="dd-card dd-tone-accent"><span class="dd-tag">linear-gradient(…)</span><h4>A gradient</h4><p>Any CSS gradient, drawn edge to edge.</p></div><div class="dd-card dd-tone-accent2"><span class="dd-tag">{ image, overlay }</span><h4>An image</h4><p>Cover-fitted, with an optional overlay to keep text readable.</p></div><div class="dd-card dd-tone-accent2"><span class="dd-tag">{ image, repeat }</span><h4>A pattern</h4><p>A small image tiled across the surface.</p></div></div><div class="dd-block-note"></div></div>
+    </div>
+  
+  
+  <footer class="dd-slide-foot">
+    <span class="dd-slide-brand"><span class="dd-slide-mark" aria-hidden="true"></span><span>docdeck</span></span>
+    <span class="dd-slide-n">13</span>
+  </footer>
+  
+</section>
+
+<section class="dd-slide dd-slide-section" id="slide-14" data-label="3. Customising the look › Three levels of change">
   
     <div class="dd-slide-body">
       <div class="dd-kicker">03 · Customising the look</div>
@@ -530,12 +554,12 @@ figcaption { font-family: var(--dd-font-mono); font-size: 0.78em; letter-spacing
   
   <footer class="dd-slide-foot">
     <span class="dd-slide-brand"><span class="dd-slide-mark" aria-hidden="true"></span><span>docdeck</span></span>
-    <span class="dd-slide-n">13</span>
+    <span class="dd-slide-n">14</span>
   </footer>
   
 </section>
 
-<section class="dd-slide dd-slide-chapter" id="slide-14" data-label="4. Writing chapters">
+<section class="dd-slide dd-slide-chapter" id="slide-15" data-label="4. Writing chapters">
   
     <div class="dd-slide-body">
       <div class="dd-chapter-n">04</div>
@@ -551,12 +575,12 @@ figcaption { font-family: var(--dd-font-mono); font-size: 0.78em; letter-spacing
   
   <footer class="dd-slide-foot">
     <span class="dd-slide-brand"><span class="dd-slide-mark" aria-hidden="true"></span><span>docdeck</span></span>
-    <span class="dd-slide-n">14</span>
+    <span class="dd-slide-n">15</span>
   </footer>
   
 </section>
 
-<section class="dd-slide dd-slide-section" id="slide-15" data-label="4. Writing chapters › Blocks">
+<section class="dd-slide dd-slide-section" id="slide-16" data-label="4. Writing chapters › Blocks">
   
     <div class="dd-slide-body">
       <div class="dd-kicker">04 · Writing chapters</div>
@@ -568,12 +592,12 @@ figcaption { font-family: var(--dd-font-mono); font-size: 0.78em; letter-spacing
   
   <footer class="dd-slide-foot">
     <span class="dd-slide-brand"><span class="dd-slide-mark" aria-hidden="true"></span><span>docdeck</span></span>
-    <span class="dd-slide-n">15</span>
+    <span class="dd-slide-n">16</span>
   </footer>
   
 </section>
 
-<section class="dd-slide dd-slide-section" id="slide-16" data-label="4. Writing chapters › Deep in the book, brief in the deck">
+<section class="dd-slide dd-slide-section" id="slide-17" data-label="4. Writing chapters › Deep in the book, brief in the deck">
   
     <div class="dd-slide-body">
       <div class="dd-kicker">04 · Writing chapters</div>
@@ -585,12 +609,12 @@ figcaption { font-family: var(--dd-font-mono); font-size: 0.78em; letter-spacing
   
   <footer class="dd-slide-foot">
     <span class="dd-slide-brand"><span class="dd-slide-mark" aria-hidden="true"></span><span>docdeck</span></span>
-    <span class="dd-slide-n">16</span>
+    <span class="dd-slide-n">17</span>
   </footer>
   
 </section>
 
-<section class="dd-slide dd-slide-chapter" id="slide-17" data-label="5. Data and screenshots">
+<section class="dd-slide dd-slide-chapter" id="slide-18" data-label="5. Data and screenshots">
   
     <div class="dd-slide-body">
       <div class="dd-chapter-n">05</div>
@@ -605,12 +629,12 @@ figcaption { font-family: var(--dd-font-mono); font-size: 0.78em; letter-spacing
   
   <footer class="dd-slide-foot">
     <span class="dd-slide-brand"><span class="dd-slide-mark" aria-hidden="true"></span><span>docdeck</span></span>
-    <span class="dd-slide-n">17</span>
+    <span class="dd-slide-n">18</span>
   </footer>
   
 </section>
 
-<section class="dd-slide dd-slide-section" id="slide-18" data-label="5. Data and screenshots › Providers">
+<section class="dd-slide dd-slide-section" id="slide-19" data-label="5. Data and screenshots › Providers">
   
     <div class="dd-slide-body">
       <div class="dd-kicker">05 · Data and screenshots</div>
@@ -622,12 +646,12 @@ figcaption { font-family: var(--dd-font-mono); font-size: 0.78em; letter-spacing
   
   <footer class="dd-slide-foot">
     <span class="dd-slide-brand"><span class="dd-slide-mark" aria-hidden="true"></span><span>docdeck</span></span>
-    <span class="dd-slide-n">18</span>
+    <span class="dd-slide-n">19</span>
   </footer>
   
 </section>
 
-<section class="dd-slide dd-slide-section" id="slide-19" data-label="5. Data and screenshots › Screenshots">
+<section class="dd-slide dd-slide-section" id="slide-20" data-label="5. Data and screenshots › Screenshots">
   
     <div class="dd-slide-body">
       <div class="dd-kicker">05 · Data and screenshots</div>
@@ -639,12 +663,12 @@ figcaption { font-family: var(--dd-font-mono); font-size: 0.78em; letter-spacing
   
   <footer class="dd-slide-foot">
     <span class="dd-slide-brand"><span class="dd-slide-mark" aria-hidden="true"></span><span>docdeck</span></span>
-    <span class="dd-slide-n">19</span>
+    <span class="dd-slide-n">20</span>
   </footer>
   
 </section>
 
-<section class="dd-slide dd-slide-chapter" id="slide-20" data-label="6. Keeping it current">
+<section class="dd-slide dd-slide-chapter" id="slide-21" data-label="6. Keeping it current">
   
     <div class="dd-slide-body">
       <div class="dd-chapter-n">06</div>
@@ -659,12 +683,12 @@ figcaption { font-family: var(--dd-font-mono); font-size: 0.78em; letter-spacing
   
   <footer class="dd-slide-foot">
     <span class="dd-slide-brand"><span class="dd-slide-mark" aria-hidden="true"></span><span>docdeck</span></span>
-    <span class="dd-slide-n">20</span>
+    <span class="dd-slide-n">21</span>
   </footer>
   
 </section>
 
-<section class="dd-slide dd-slide-section" id="slide-21" data-label="6. Keeping it current › What the check catches">
+<section class="dd-slide dd-slide-section" id="slide-22" data-label="6. Keeping it current › What the check catches">
   
     <div class="dd-slide-body">
       <div class="dd-kicker">06 · Keeping it current</div>
@@ -675,12 +699,12 @@ figcaption { font-family: var(--dd-font-mono); font-size: 0.78em; letter-spacing
   
   <footer class="dd-slide-foot">
     <span class="dd-slide-brand"><span class="dd-slide-mark" aria-hidden="true"></span><span>docdeck</span></span>
-    <span class="dd-slide-n">21</span>
+    <span class="dd-slide-n">22</span>
   </footer>
   
 </section>
 
-<section class="dd-slide dd-slide-section" id="slide-22" data-label="6. Keeping it current › Slides that fit">
+<section class="dd-slide dd-slide-section" id="slide-23" data-label="6. Keeping it current › Slides that fit">
   
     <div class="dd-slide-body">
       <div class="dd-kicker">06 · Keeping it current</div>
@@ -692,12 +716,12 @@ figcaption { font-family: var(--dd-font-mono); font-size: 0.78em; letter-spacing
   
   <footer class="dd-slide-foot">
     <span class="dd-slide-brand"><span class="dd-slide-mark" aria-hidden="true"></span><span>docdeck</span></span>
-    <span class="dd-slide-n">22</span>
+    <span class="dd-slide-n">23</span>
   </footer>
   
 </section>
 
-<section class="dd-slide dd-slide-chapter" id="slide-23" data-label="7. The Claude Code skill">
+<section class="dd-slide dd-slide-chapter" id="slide-24" data-label="7. The Claude Code skill">
   
     <div class="dd-slide-body">
       <div class="dd-chapter-n">07</div>
@@ -712,12 +736,12 @@ figcaption { font-family: var(--dd-font-mono); font-size: 0.78em; letter-spacing
   
   <footer class="dd-slide-foot">
     <span class="dd-slide-brand"><span class="dd-slide-mark" aria-hidden="true"></span><span>docdeck</span></span>
-    <span class="dd-slide-n">23</span>
+    <span class="dd-slide-n">24</span>
   </footer>
   
 </section>
 
-<section class="dd-slide dd-slide-section" id="slide-24" data-label="7. The Claude Code skill › What the skill does">
+<section class="dd-slide dd-slide-section" id="slide-25" data-label="7. The Claude Code skill › What the skill does">
   
     <div class="dd-slide-body">
       <div class="dd-kicker">07 · The Claude Code skill</div>
@@ -728,12 +752,12 @@ figcaption { font-family: var(--dd-font-mono); font-size: 0.78em; letter-spacing
   
   <footer class="dd-slide-foot">
     <span class="dd-slide-brand"><span class="dd-slide-mark" aria-hidden="true"></span><span>docdeck</span></span>
-    <span class="dd-slide-n">24</span>
+    <span class="dd-slide-n">25</span>
   </footer>
   
 </section>
 
-<section class="dd-slide dd-slide-section" id="slide-25" data-label="7. The Claude Code skill › Shaped to each project">
+<section class="dd-slide dd-slide-section" id="slide-26" data-label="7. The Claude Code skill › Shaped to each project">
   
     <div class="dd-slide-body">
       <div class="dd-kicker">07 · The Claude Code skill</div>
@@ -745,12 +769,12 @@ figcaption { font-family: var(--dd-font-mono); font-size: 0.78em; letter-spacing
   
   <footer class="dd-slide-foot">
     <span class="dd-slide-brand"><span class="dd-slide-mark" aria-hidden="true"></span><span>docdeck</span></span>
-    <span class="dd-slide-n">25</span>
+    <span class="dd-slide-n">26</span>
   </footer>
   
 </section>
 
-<section class="dd-slide dd-slide-chapter" id="slide-26" data-label="8. What comes next">
+<section class="dd-slide dd-slide-chapter" id="slide-27" data-label="8. What comes next">
   
     <div class="dd-slide-body">
       <div class="dd-chapter-n">08</div>
@@ -763,7 +787,7 @@ figcaption { font-family: var(--dd-font-mono); font-size: 0.78em; letter-spacing
   
   <footer class="dd-slide-foot">
     <span class="dd-slide-brand"><span class="dd-slide-mark" aria-hidden="true"></span><span>docdeck</span></span>
-    <span class="dd-slide-n">26</span>
+    <span class="dd-slide-n">27</span>
   </footer>
   
 </section>
@@ -772,7 +796,7 @@ figcaption { font-family: var(--dd-font-mono); font-size: 0.78em; letter-spacing
 
 <nav class="dd-deck-nav" aria-label="Slides">
   <button type="button" data-go="-1" aria-label="Previous slide">‹</button>
-  <span class="dd-deck-pos"><span id="dd-pos">1</span> / 26</span>
+  <span class="dd-deck-pos"><span id="dd-pos">1</span> / 27</span>
   <button type="button" data-go="1" aria-label="Next slide">›</button>
   <button type="button" data-full aria-label="Full screen">⤢</button>
 </nav>

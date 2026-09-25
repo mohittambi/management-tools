@@ -63,6 +63,16 @@ Three layers: account, role, modules.
 :::
 ```
 
+## Backgrounds (config, not chapters)
+
+Set in `docdeck.config.ts` under `background`, per surface: `page` (every
+book page), `cover` (book cover), `slide`, `deckCover`, `chapter` (chapter
+openers). Each is a theme role (`"ink"`), a colour, a CSS gradient, or
+`{ color, gradient, image, size, position, repeat, overlay, text }`. Text
+turns light automatically on dark grounds; say `text: "light"` for a photo
+without an overlay. Keep page backgrounds quiet; use strong ones on covers
+and chapter openers.
+
 ## Providers file
 
 ```ts
