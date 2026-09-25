@@ -1,9 +1,9 @@
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, relative } from "node:path";
 import type { Browser } from "playwright-core";
 import type { LoadedConfig } from "./config.ts";
 import { lintChapter, loadChapters, referencedScreens, referencedSources, type Chapter, type LintIssue } from "./content.ts";
-import { buildBookPdf, buildDeckPdf, launch, measureDeck } from "./pdf.ts";
+import { buildBookPdf, buildDeckPdf, launch, measureDeck, type StampOptions } from "./pdf.ts";
 import { hasSource, loadProviders, resolveSources } from "./providers.ts";
 import { baseCss, dataUri, renderBook, renderChapters, renderDeck, type RenderInput, type RenderedChapter } from "./render.ts";
 import { captureScreens } from "./screens.ts";
@@ -18,7 +18,7 @@ type Prepared = {
   chapters: Chapter[];
   input: RenderInput;
   rendered: RenderedChapter[];
-  stamp: { fontFile: string | null; muted: string };
+  stamp: StampOptions;
   warnings: string[];
 };
 
@@ -38,13 +38,22 @@ async function prepare(loaded: LoadedConfig, opts: { browser: Browser | null; ca
     logoOnDark: config.brand.logoOnDark ? dataUri(loaded.path(config.brand.logoOnDark)) : null,
     mark: config.brand.mark ? dataUri(loaded.path(config.brand.mark)) : null,
     css: { base: baseCss(), theme: themeCss(tokens), fonts: fontCss(fonts) },
+    labels: config.labels,
+    page: { size: config.book.size, margin: config.book.margin, paper: tokens.paper },
+    extraCss: config.styles.map((f) => readFileSync(loaded.path(f), "utf8")).join("\n"),
     sources,
     screens: shots.uris,
     templatesDir: config.templates ? loaded.path(config.templates) : undefined,
   };
   const warnings = [...shots.warnings];
   if (!input.logo) warnings.push(`Logo not found at ${config.brand.logo}; the cover shows the project name instead.`);
-  return { chapters, input, rendered: renderChapters(chapters, input), stamp: { fontFile: stampFontFile(fonts.body), muted: tokens.muted }, warnings };
+  return {
+    chapters,
+    input,
+    rendered: renderChapters(chapters, input),
+    stamp: { fontFile: stampFontFile(fonts.body), muted: tokens.muted, margin: config.book.margin, footer: config.book.footer },
+    warnings,
+  };
 }
 
 export type CheckResult = { issues: LintIssue[]; warnings: string[] };

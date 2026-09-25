@@ -7,7 +7,7 @@ import { describe, expect, it } from "vitest";
 import { editionLabel } from "../src/build.ts";
 import { forMode, lintChapter, referencedScreens, referencedSources, splitSections } from "../src/content.ts";
 import { createMarkdown } from "../src/markdown.ts";
-import { startPages } from "../src/pdf.ts";
+import { footerText, sideMargins, startPages } from "../src/pdf.ts";
 import { asTable } from "../src/providers.ts";
 import { parseCssVars } from "../src/theme.ts";
 
@@ -116,6 +116,14 @@ describe("index page numbers", () => {
     ]);
     expect(starts).toEqual({ 1: 4, 2: 7, 3: 8 });
     expect(total).toBe(11);
+  });
+
+  it("reads side margins from the CSS shorthand and fills the footer pattern", () => {
+    const m = sideMargins("24mm 22mm 26mm 20mm");
+    expect(Math.round(m.left)).toBe(57);
+    expect(Math.round(m.right)).toBe(62);
+    expect(Math.round(sideMargins("20mm").left)).toBe(57);
+    expect(footerText("{project} · {chapter} · {page}/{pages}", { project: "P", chapter: "C", page: 3, pages: 9 })).toBe("P · C · 3/9");
   });
 
   it("uses the build date for an automatic edition", () => {

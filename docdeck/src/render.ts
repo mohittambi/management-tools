@@ -32,8 +32,15 @@ export type Slide =
   | { kind: "chapter"; label: string; chapter: RenderedChapter; html: string }
   | { kind: "section"; label: string; chapter: RenderedChapter; heading: string; html: string };
 
+export type Labels = { contents: string; index: string; chapter: string; preparedFor: string; edition: string };
+
 export type RenderInput = {
   project: Project;
+  labels: Labels;
+  /** Page size, margins and colour for the printed book. */
+  page: { size: string; margin: string; paper: string };
+  /** Project stylesheets, applied last. */
+  extraCss: string;
   logo: string | null;
   logoOnDark: string | null;
   mark: string | null;
@@ -85,7 +92,21 @@ function env(templatesDir?: string) {
 }
 
 function css(input: RenderInput, extra: string) {
-  return [input.css.fonts, input.css.theme, input.css.base, extra].join("\n");
+  return [input.css.fonts, input.css.theme, input.css.base, extra, input.extraCss].join("\n");
+}
+
+const PAGE_HEIGHT: Record<string, string> = { a4: "297mm", a5: "210mm", a3: "420mm", letter: "279.4mm", legal: "355.6mm" };
+
+/** Page rules need literal values; custom properties do not reach @page. */
+function pageCss(input: RenderInput) {
+  const { size, margin, paper } = input.page;
+  const height = PAGE_HEIGHT[size.trim().split(/\s+/)[0].toLowerCase()] ?? "100vh";
+  return [
+    `@page { size: ${size}; margin: ${margin}; background: ${paper}; }`,
+    "@page cover { margin: 0; }",
+    `html { background: ${paper}; }`,
+    `.dd-print .dd-cover { height: ${height}; }`,
+  ].join("\n");
 }
 
 export type BookParts = { cover: boolean; index: boolean; chapters: number[] | "all" };
@@ -101,8 +122,9 @@ export function renderBook(
   return env(input.templatesDir).render("book.njk", {
     project: input.project,
     logo: input.logo,
-    css: css(input, readFileSync(engineFile("styles", "book.css"), "utf8")),
+    css: css(input, readFileSync(engineFile("styles", "book.css"), "utf8") + "\n" + pageCss(input)),
     print: Boolean(opts.print),
+    labels: input.labels,
     show: { cover: parts.cover, index: parts.index },
     allChapters: bookChapters,
     chapters,
@@ -134,6 +156,7 @@ export function renderDeck(rendered: RenderedChapter[], input: RenderInput, opts
     mark: input.mark,
     css: css(input, readFileSync(engineFile("styles", "deck.css"), "utf8")),
     print: Boolean(opts.print),
+    labels: input.labels,
     slides,
     allChapters: rendered,
     deckScript: readFileSync(engineFile("templates", "deck.js"), "utf8"),

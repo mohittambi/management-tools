@@ -1,0 +1,23 @@
+# __NAME__ — writing guide for the client document
+
+The client-docs skill reads this file before it writes any chapter. Keep it
+short. Anything here overrides the skill's defaults.
+
+## Who reads it
+
+- Audience: (the client team, their role, what they already know)
+- Purpose: (a demo, a sign-off, a training handout)
+
+## Words
+
+- Use: (the names people see on screen)
+- Avoid: (internal names, codes, jargon)
+
+## Chapters
+
+- Order: (the chapters and the order they should run)
+- Keep out of the deck: (detail that belongs only in the book)
+
+## Facts to check before every build
+
+- (where the facts come from in the code, and anything that changes often)

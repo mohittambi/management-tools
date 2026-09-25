@@ -7,6 +7,10 @@ folder and works with any project.
 |---|---|
 | [docdeck](docdeck/) | Builds a client **deck** (16:9) and a product **document** (A4) as HTML and PDF. Uses the project's own theme, logo and fonts, tables read from the project's code, and screenshots of the running app. Comes with a Claude Code skill, `client-docs`. |
 
+docdeck documents itself with docdeck: [the deck](docs/output/deck.pdf) and
+[the book](docs/output/book.pdf), built from `docs/`. Rebuild them with
+`node docdeck/bin/docdeck.mjs -c docs/docdeck.config.ts build`.
+
 ## Setup
 
 ```bash

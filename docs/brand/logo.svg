@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="340" height="80" viewBox="0 0 340 80">
+  <rect x="4" y="14" width="52" height="40" rx="5" fill="#2b5d8a"/>
+  <rect x="22" y="26" width="40" height="50" rx="4" fill="#fffefb" stroke="#1c2127" stroke-width="3"/>
+  <line x1="30" y1="40" x2="54" y2="40" stroke="#2f6f5a" stroke-width="3"/>
+  <line x1="30" y1="50" x2="54" y2="50" stroke="#1c2127" stroke-width="2.5" opacity="0.5"/>
+  <line x1="30" y1="59" x2="48" y2="59" stroke="#1c2127" stroke-width="2.5" opacity="0.5"/>
+  <text x="80" y="56" font-family="Georgia, 'Times New Roman', serif" font-size="40" font-weight="600" fill="#1c2127">docdeck</text>
+</svg>

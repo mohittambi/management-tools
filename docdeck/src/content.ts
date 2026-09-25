@@ -145,7 +145,7 @@ function toSection(s: { heading: string; lines: string[] }): Section {
 
 export type LintIssue = { file: string; line: number; message: string; level: "error" | "warning" };
 
-const RULES: Array<{ re: RegExp; message: string; level: LintIssue["level"] }> = [
+export const LINT_RULES: Array<{ re: RegExp; message: string; level: LintIssue["level"] }> = [
   { re: /\b(?=[0-9a-f]*[a-f])(?=[0-9a-f]*\d)[0-9a-f]{7,40}\b/, message: "looks like a commit hash; describe the change in the chapter instead", level: "error" },
   { re: /\bcommit(s|ted)?\b/i, message: "mentions commits; clients read the current state, not history", level: "error" },
   { re: /\b(PR|pull request)\s*#?\d+/i, message: "mentions a pull request", level: "error" },
@@ -170,7 +170,7 @@ export function lintChapter(ch: Pick<Chapter, "file" | "body" | "title">): LintI
   const name = basename(ch.file);
   if (!ch.body.trim()) issues.push({ file: name, line: 1, message: "chapter is empty", level: "error" });
   proseLines(ch.body).forEach((line, idx) => {
-    for (const rule of RULES) {
+    for (const rule of LINT_RULES) {
       if (rule.re.test(line)) issues.push({ file: name, line: idx + 1, message: rule.message, level: rule.level });
     }
   });

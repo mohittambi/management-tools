@@ -183,6 +183,7 @@ program
         .replace("__THEME__", css ? `css: "${css}",\n    selector: ":root",\n    map: { paper: "--background", ink: "--foreground", accent: "--primary" },` : `tokens: { accent: "#2f4f7f" },`),
     );
     writeFileSync(join(dir, "providers.ts"), tpl("providers.ts.txt"));
+    writeFileSync(join(dir, "GUIDE.md"), tpl("GUIDE.md.txt").replaceAll("__NAME__", name));
     // Scoped ESM, so the TypeScript config loads as a module in any project.
     if (!existsSync(join(dir, "package.json"))) writeFileSync(join(dir, "package.json"), '{\n  "private": true,\n  "type": "module"\n}\n');
     for (const f of readdirSync(join(engineDir, "templates", "init", "chapters"))) {
@@ -194,15 +195,17 @@ program
 
 program
   .command("install-skill")
-  .description("install the client-docs skill for Claude Code (~/.claude/skills/client-docs)")
+  .description("install the client-docs skill for Claude Code (~/.claude/skills, or this project with --project)")
   .option("--dest <dir>", "skills folder", join(homedir(), ".claude", "skills"))
-  .action((o: { dest: string }) => {
-    const target = join(o.dest, "client-docs");
+  .option("--project", "install into ./.claude/skills so this project can customise its own copy")
+  .action((o: { dest: string; project?: boolean }) => {
+    const target = join(o.project ? join(process.cwd(), ".claude", "skills") : o.dest, "client-docs");
     mkdirSync(target, { recursive: true });
     cpSync(join(engineDir, "skill"), target, { recursive: true });
     const skill = join(target, "SKILL.md");
     writeFileSync(skill, readFileSync(skill, "utf8").replaceAll("__DOCDECK_BIN__", join(engineDir, "bin", "docdeck.mjs")));
     console.log(`${green("✓")} installed ${target}`);
+    if (o.project) console.log(dim("edit its SKILL.md for this project; a GUIDE.md next to docdeck.config.ts is read too"));
   });
 
 program.parseAsync(process.argv).catch((e: unknown) => {

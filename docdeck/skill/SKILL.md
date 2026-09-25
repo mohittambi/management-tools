@@ -19,6 +19,10 @@ Run commands from the project root.
 - Config: `docdeck.config.ts` or `docs/client/docdeck.config.ts`. Read it: it
   names the chapters folder, the providers file, the theme source, the logo
   and the screens the app can capture.
+- **Project guide:** if a `GUIDE.md` sits next to the config, read it before
+  writing anything. It holds this project's audience, words to use and avoid,
+  chapter order and anything else specific to it, and it overrides the
+  defaults below wherever they differ.
 - No config yet: run `DOCDECK init --name "<Project>" --logo <path> --css <stylesheet>`
   after asking the user only for what you cannot find yourself (look for a
   logo under `public/`, and a stylesheet that declares colour tokens in

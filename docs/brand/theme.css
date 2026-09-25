@@ -1,0 +1,11 @@
+/* docdeck's own look: ink on warm paper, a deep blue and a pine green. */
+:root {
+  --paper: #f6f4ef;
+  --ink: #1c2127;
+  --surface: #fffefb;
+  --blue: #2b5d8a;
+  --pine: #2f6f5a;
+  --amber: #b07a1c;
+  --rule: #d9d4c9;
+  --muted: #5f6570;
+}

@@ -78,6 +78,27 @@ export const configSchema = z.object({
       shots: z.record(z.string(), shotSchema).default({}),
     })
     .optional(),
+  /** Extra stylesheets, applied after the engine's own. Use theme roles (--dd-*). */
+  styles: z.array(z.string()).default([]),
+  book: z
+    .object({
+      size: z.string().default("A4"),
+      /** CSS margin shorthand; the page colour runs under it to the edge. */
+      margin: z.string().default("24mm 22mm 26mm 22mm"),
+      /** Running footer. {project} {chapter} {page} {pages} are filled in. */
+      footer: z.string().default("{project}  ·  {chapter}"),
+    })
+    .default({ size: "A4", margin: "24mm 22mm 26mm 22mm", footer: "{project}  ·  {chapter}" }),
+  /** Words the templates print, for projects in other languages. */
+  labels: z
+    .object({
+      contents: z.string().default("Contents"),
+      index: z.string().default("Index"),
+      chapter: z.string().default("Chapter"),
+      preparedFor: z.string().default("Prepared for"),
+      edition: z.string().default("Edition"),
+    })
+    .default({ contents: "Contents", index: "Index", chapter: "Chapter", preparedFor: "Prepared for", edition: "Edition" }),
   out: z.string().default("docs/client/dist"),
   outputs: z.array(z.enum(["deck", "book"])).default(["deck", "book"]),
 });

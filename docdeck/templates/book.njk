@@ -8,12 +8,12 @@
 </head>
 <body class="dd-book{% if print %} dd-print{% endif %}">
 {% if show.cover %}
-<section class="dd-cover">{{ m.cover(project, logo) }}</section>
+<section class="dd-cover">{{ m.cover(project, logo, labels) }}</section>
 {% endif %}
 {% if show.index %}
 <section class="dd-index" id="contents">
-  <div class="dd-kicker">Contents</div>
-  <h1 class="dd-index-title">Index</h1>
+  <div class="dd-kicker">{{ labels.contents }}</div>
+  <h1 class="dd-index-title">{{ labels.index }}</h1>
   <ol class="dd-toc">
   {% for ch in allChapters %}
     <li>
@@ -33,7 +33,7 @@
 {% for ch in chapters %}
 <article class="dd-chapter" id="ch-{{ ch.slug }}">
   <header class="dd-chapter-head">
-    <div class="dd-kicker">Chapter {{ ch.number | pad }}</div>
+    <div class="dd-kicker">{{ labels.chapter }} {{ ch.number | pad }}</div>
     <h1>{{ ch.title }}</h1>
     {% if ch.summary %}<p class="dd-lede">{{ ch.summary }}</p>{% endif %}
   </header>

@@ -48,13 +48,35 @@ function hexToRgb(hex: string) {
   return rgb(((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255);
 }
 
+export type StampOptions = { fontFile: string | null; muted: string; margin: string; footer: string };
+
+const PT_PER = { mm: 72 / 25.4, cm: 72 / 2.54, in: 72, pt: 1, px: 0.75 } as const;
+
+/** Left and right page margins in points, from a CSS margin shorthand. */
+export function sideMargins(margin: string): { left: number; right: number; bottom: number } {
+  const parts = margin.trim().split(/\s+/).map((v) => {
+    const m = v.match(/^([\d.]+)(mm|cm|in|pt|px)?$/);
+    return m ? Number(m[1]) * PT_PER[(m[2] ?? "px") as keyof typeof PT_PER] : 51;
+  });
+  const [t, r = t, b = t, l = r] = parts;
+  return { left: l, right: r, bottom: b };
+}
+
+export function footerText(pattern: string, v: { project: string; chapter: string; page: number; pages: number }) {
+  return pattern
+    .replaceAll("{project}", v.project)
+    .replaceAll("{chapter}", v.chapter)
+    .replaceAll("{page}", String(v.page))
+    .replaceAll("{pages}", String(v.pages));
+}
+
 export type BookPdfResult = { pdf: Uint8Array; pages: Record<number, number>; total: number; warnings: string[] };
 
 export async function buildBookPdf(
   browser: Browser,
   rendered: RenderedChapter[],
   input: RenderInput,
-  stamp: { fontFile: string | null; muted: string },
+  stamp: StampOptions,
 ): Promise<BookPdfResult> {
   const warnings: string[] = [];
   const page = await browser.newPage();
@@ -91,17 +113,19 @@ export async function buildBookPdf(
   }
   const color = hexToRgb(stamp.muted);
   const ranges = chapterPages.map((c) => ({ from: starts[c.number], to: starts[c.number] + c.pages - 1, title: bookChapters.find((b) => b.number === c.number)!.title }));
+  const sides = sideMargins(stamp.margin);
+  const pages = doc.getPageCount();
   doc.getPages().forEach((p, i) => {
     const n = i + 1;
     if (n <= cover) return;
-    const label = n <= cover + index ? "Index" : (ranges.find((r) => n >= r.from && n <= r.to)?.title ?? "");
-    const left = `${input.project.name}  ·  ${label}`;
+    const chapter = n <= cover + index ? input.labels.index : (ranges.find((r) => n >= r.from && n <= r.to)?.title ?? "");
+    const left = footerText(stamp.footer, { project: input.project.name, chapter, page: n, pages });
     const size = 8;
     const { width } = p.getSize();
-    const margin = 51; // 18 mm
-    p.drawText(left, { x: margin, y: 28, size, font, color });
+    const y = Math.max(18, sides.bottom / 2 - 3);
+    p.drawText(left, { x: sides.left, y, size, font, color });
     const num = String(n);
-    p.drawText(num, { x: width - margin - font.widthOfTextAtSize(num, size), y: 28, size, font, color });
+    p.drawText(num, { x: width - sides.right - font.widthOfTextAtSize(num, size), y, size, font, color });
   });
   doc.setTitle(`${input.project.name} · ${input.project.title}`);
   doc.setCreator("docdeck");

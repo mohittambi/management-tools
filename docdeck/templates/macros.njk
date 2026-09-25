@@ -1,4 +1,4 @@
-{% macro cover(project, logo) %}
+{% macro cover(project, logo, labels) %}
 <div class="dd-cover-inner">
   <div class="dd-cover-brand">{% if logo %}<img class="dd-logo" src="{{ logo }}" alt="{{ project.name }}">{% else %}<span class="dd-wordmark">{{ project.name }}</span>{% endif %}</div>
   <div class="dd-cover-title">
@@ -7,8 +7,8 @@
     {% if project.tagline %}<p class="dd-tagline">{{ project.tagline }}</p>{% endif %}
   </div>
   <dl class="dd-cover-meta">
-    {% if project.audience %}<div><dt>Prepared for</dt><dd>{{ project.audience }}</dd></div>{% endif %}
-    <div><dt>Edition</dt><dd>{{ project.edition }}</dd></div>
+    {% if project.audience %}<div><dt>{{ labels.preparedFor }}</dt><dd>{{ project.audience }}</dd></div>{% endif %}
+    <div><dt>{{ labels.edition }}</dt><dd>{{ project.edition }}</dd></div>
   </dl>
 </div>
 {% endmacro %}
