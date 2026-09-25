@@ -1,0 +1,16 @@
+import { defineProviders } from "docdeck";
+
+// Data the chapters can show. Read it from your code so the document never
+// drifts from the product. Chapters ask for a provider by path, e.g.
+//   :::table source="features"
+//   :::
+export default defineProviders({
+  features: () => ({
+    columns: ["Feature", "What it does"],
+    rows: [
+      ["Sign in", "Staff sign in with their own account."],
+      ["Dashboard", "Each person sees the work waiting for them."],
+    ],
+  }),
+  journey: ["Request received", "Reviewed", "Done"],
+});

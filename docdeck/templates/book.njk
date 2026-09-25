@@ -1,0 +1,44 @@
+{% import "macros.njk" as m %}<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ project.name }} · {{ project.title }}</title>
+<style>{{ css | safe }}</style>
+</head>
+<body class="dd-book{% if print %} dd-print{% endif %}">
+{% if show.cover %}
+<section class="dd-cover">{{ m.cover(project, logo) }}</section>
+{% endif %}
+{% if show.index %}
+<section class="dd-index" id="contents">
+  <div class="dd-kicker">Contents</div>
+  <h1 class="dd-index-title">Index</h1>
+  <ol class="dd-toc">
+  {% for ch in allChapters %}
+    <li>
+      <a href="#ch-{{ ch.slug }}">
+        <span class="dd-toc-n">{{ ch.number | pad }}</span>
+        <span class="dd-toc-body"><span class="dd-toc-title">{{ ch.title }}</span>{% if ch.summary %}<span class="dd-toc-summary">{{ ch.summary }}</span>{% endif %}</span>
+        <span class="dd-toc-page">{{ pages[ch.number] if pages and pages[ch.number] else "" }}</span>
+      </a>
+      {% if ch.bookSections.length %}
+      <ul class="dd-toc-sections">{% for s in ch.bookSections %}<li><a href="#{{ ch.slug }}-{{ s.slug }}">{{ s.heading }}</a></li>{% endfor %}</ul>
+      {% endif %}
+    </li>
+  {% endfor %}
+  </ol>
+</section>
+{% endif %}
+{% for ch in chapters %}
+<article class="dd-chapter" id="ch-{{ ch.slug }}">
+  <header class="dd-chapter-head">
+    <div class="dd-kicker">Chapter {{ ch.number | pad }}</div>
+    <h1>{{ ch.title }}</h1>
+    {% if ch.summary %}<p class="dd-lede">{{ ch.summary }}</p>{% endif %}
+  </header>
+  <div class="dd-prose">{{ ch.bookHtml | safe }}</div>
+</article>
+{% endfor %}
+</body>
+</html>

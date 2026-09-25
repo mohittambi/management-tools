@@ -1,0 +1,34 @@
+/* A4 document */
+@page { size: A4; margin: 20mm 18mm 22mm 18mm; }
+@page cover { margin: 0; }
+
+.dd-book { font-size: 10.5pt; }
+.dd-book:not(.dd-print) { padding: 32px 16px 80px; }
+.dd-book:not(.dd-print) > section, .dd-book:not(.dd-print) > article { max-width: 820px; margin: 0 auto 64px; }
+
+.dd-cover { page: cover; break-after: page; }
+.dd-print .dd-cover { height: 297mm; padding: 26mm 22mm 24mm; background: var(--dd-paper); border-left: 10mm solid var(--dd-accent); }
+.dd-book:not(.dd-print) .dd-cover { min-height: 560px; padding: 48px; background: var(--dd-surface); border: 1px solid var(--dd-rule); border-left: 10px solid var(--dd-accent); border-radius: var(--dd-radius); }
+
+.dd-index { break-after: page; display: flex; flex-direction: column; gap: 0.4em; }
+.dd-index-title { font-size: 2.2em; margin-bottom: 0.6em; }
+.dd-toc { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.dd-toc > li { border-top: 1px solid var(--dd-rule); padding: 0.7em 0; break-inside: avoid; }
+.dd-toc > li:last-child { border-bottom: 1px solid var(--dd-rule); }
+.dd-toc > li > a { display: grid; grid-template-columns: 2.4em 1fr auto; gap: 0.8em; align-items: baseline; color: var(--dd-ink); }
+.dd-toc-n { font-family: var(--dd-font-mono); color: var(--dd-accent); font-weight: 600; }
+.dd-toc-body { display: flex; flex-direction: column; }
+.dd-toc-title { font-weight: 600; font-size: 1.08em; }
+.dd-toc-summary { color: var(--dd-muted); font-size: 0.92em; }
+.dd-toc-page { font-family: var(--dd-font-mono); font-variant-numeric: tabular-nums; color: var(--dd-muted); }
+.dd-toc-sections { list-style: none; margin: 0.35em 0 0 3.2em; padding: 0; display: flex; flex-wrap: wrap; gap: 0.15em 1.2em; font-size: 0.88em; }
+.dd-toc-sections a { color: var(--dd-muted); }
+
+.dd-chapter { break-before: page; display: flex; flex-direction: column; gap: 1.4em; }
+.dd-chapter-head { display: flex; flex-direction: column; gap: 0.45em; padding-bottom: 1em; border-bottom: 2px solid var(--dd-accent); }
+.dd-chapter-head h1 { font-size: 2.3em; }
+.dd-book .dd-prose h2 { break-after: avoid; padding-top: 0.4em; }
+.dd-book .dd-prose h3 { break-after: avoid; }
+.dd-book figure, .dd-book .dd-compare, .dd-book .dd-callout, .dd-book .dd-card, .dd-book .dd-step, .dd-book tr { break-inside: avoid; }
+.dd-print .dd-table-wrap { overflow: visible; }
+.dd-print .dd-screen-frame { box-shadow: none; }

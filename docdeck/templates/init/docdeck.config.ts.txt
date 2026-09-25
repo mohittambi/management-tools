@@ -1,0 +1,28 @@
+import { defineConfig } from "docdeck";
+
+// Paths below are relative to `root` (the project root).
+export default defineConfig({
+  root: "__ROOT__",
+  project: {
+    name: "__NAME__",
+    title: "Product overview",
+    tagline: "",
+    audience: "",
+    edition: "auto", // the build date
+  },
+  brand: {
+    logo: "__LOGO__",
+  },
+  theme: {
+    __THEME__
+  },
+  chapters: "__CHAPTERS__",
+  providers: "__PROVIDERS__",
+  // screens: {
+  //   baseUrl: "http://localhost:3000",
+  //   login: { path: "/login", email: "demo@example.com", password: "…" },
+  //   shots: { dashboard: "/" },
+  // },
+  out: "__OUT__",
+  outputs: ["deck", "book"],
+});

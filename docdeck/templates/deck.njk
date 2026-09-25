@@ -1,0 +1,62 @@
+{% import "macros.njk" as m %}<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ project.name }} · {{ project.title }}</title>
+<style>{{ css | safe }}</style>
+{% if mark or logo %}<style>:root { --dd-mark: url("{{ (mark or logo) | safe }}"); }</style>{% endif %}
+</head>
+<body class="dd-deck{% if print %} dd-print{% endif %}">
+<main class="dd-slides">
+{% for s in slides %}
+<section class="dd-slide dd-slide-{{ s.kind }}" id="slide-{{ loop.index }}" data-label="{{ s.label }}">
+  {% if s.kind == "cover" %}
+    {{ m.cover(project, logoOnDark or logo) }}
+  {% elif s.kind == "index" %}
+    <div class="dd-slide-body">
+      <div class="dd-kicker">Contents</div>
+      <h2>Index</h2>
+      <ol class="dd-deck-toc">
+      {% for ch in allChapters %}{% if ch.deck %}
+        <li><a href="#slide-{{ ch.firstSlide }}"><span class="dd-toc-n">{{ ch.number | pad }}</span><span class="dd-toc-title">{{ ch.title }}</span><span class="dd-toc-page">{{ ch.firstSlide }}</span></a></li>
+      {% endif %}{% endfor %}
+      </ol>
+    </div>
+  {% elif s.kind == "chapter" %}
+    <div class="dd-slide-body">
+      <div class="dd-chapter-n">{{ s.chapter.number | pad }}</div>
+      <h2 class="dd-chapter-title">{{ s.chapter.title }}</h2>
+      {% if s.chapter.summary %}<p class="dd-lede">{{ s.chapter.summary }}</p>{% endif %}
+      {% if s.html %}<div class="dd-prose">{{ s.html | safe }}</div>{% endif %}
+      {% if s.chapter.sections.length %}
+      <ol class="dd-chapter-agenda">{% for sec in s.chapter.sections %}<li>{{ sec.heading }}</li>{% endfor %}</ol>
+      {% endif %}
+    </div>
+  {% else %}
+    <div class="dd-slide-body">
+      <div class="dd-kicker">{{ s.chapter.number | pad }} · {{ s.chapter.title }}</div>
+      <h2>{{ s.heading }}</h2>
+      <div class="dd-prose">{{ s.html | safe }}</div>
+    </div>
+  {% endif %}
+  {% if s.kind != "cover" %}
+  <footer class="dd-slide-foot">
+    <span class="dd-slide-brand">{% if mark or logo %}<span class="dd-slide-mark{% if not mark %} dd-wide{% endif %}" aria-hidden="true"></span>{% endif %}<span>{{ project.name }}</span></span>
+    <span class="dd-slide-n">{{ loop.index }}</span>
+  </footer>
+  {% endif %}
+</section>
+{% endfor %}
+</main>
+{% if not print %}
+<nav class="dd-deck-nav" aria-label="Slides">
+  <button type="button" data-go="-1" aria-label="Previous slide">‹</button>
+  <span class="dd-deck-pos"><span id="dd-pos">1</span> / {{ slides.length }}</span>
+  <button type="button" data-go="1" aria-label="Next slide">›</button>
+  <button type="button" data-full aria-label="Full screen">⤢</button>
+</nav>
+{% endif %}
+<script>{{ deckScript | safe }}</script>
+</body>
+</html>

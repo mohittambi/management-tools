@@ -1,0 +1,14 @@
+@reference "tailwindcss";
+@custom-variant dark (&:is(.dark *));
+/* brand tokens */
+:root {
+  --bg: #fafaf7;
+  --fg: #101820;
+  --brand: #7a2e8c;
+  --brand-2: var(--teal);
+  --teal: #11706a;
+  --warn: #c07a12;
+  @media (min-width: 10px) { --ignored: #000000; }
+}
+.dark { --bg: #000000; }
+@theme inline { --color-bg: var(--bg); }

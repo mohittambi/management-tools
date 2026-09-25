@@ -1,0 +1,17 @@
+{
+  "name": "management-tools",
+  "private": true,
+  "description": "Reusable tools for client-facing project work. First tool: docdeck, a themed deck and document generator.",
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "chokidar": "4"
+      }
+    }
+  }
+}
